@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ```{r}
-data = read.csv("untitled form.csv")
+data = read.csv("Untitled form.csv")
 
 #changing columns
 
@@ -22,12 +22,16 @@ ggplot(data, aes(sleep ,intensity)) +
        x = "Hours Slept at Night",
        y = "Intensity of Exercise") 
 
-ggplot(data, aes(sleep, fill = intensity)) +
-  geom_histogram(binwidth = 2, alpha = 0.8, position = "stack")+ 
-    labs(title = "Histogram of Hours Slept at Night by Exercise Intensity",
+
+data$sleep_binned = cut(data$sleep, breaks = c(0, 6, 7, 8, 9, Inf), 
+                         labels = c("0-6", "6-7", "7-8", "8-9", "9+"), 
+                         include.lowest = TRUE, right = FALSE)
+
+ggplot(data , aes(sleep_binned, fill = intensity)) +
+  geom_bar(position = "stack")+ 
+    labs(title = "Comparitive Bar Chart between Hours Slept at Night and Exercise Intensity",
        x = "Hours Slept at Night",
-       y = "Frequency") +
-  theme_minimal()
+       y = "Frequency")
 
 ```
 

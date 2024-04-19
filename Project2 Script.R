@@ -1,22 +1,24 @@
-data = read.csv("untitled form.csv")
+data = read.csv("Untitled form.csv")
 
-#changing columns
-
-
+#creating a list of new names for the columns of the data.
 new_name = c("timestamp", "commute", "exercise", "intensity", "employment", "workingHours", "gender", "sleep", "screenTime")
+
+
+#changing the names of the columns of the data to the new ones.
 colnames(data) = new_name
 
+#loading tidyverse library for using ggplot.
 library(tidyverse)
 
-ggplot(data, aes(sleep ,intensity)) + 
-  geom_boxplot(alpha = 0.7, color = "black")+    
-  labs(title = "Hours Slept at Night by Exercise Intensity",
-       x = "Hours Slept at Night",
-       y = "Intensity of Exercise") 
+#The sleep time data has been categorized into custom bins where we define the intervals to be [0,6), [6,7), [7,8), [8,9), [9,Inf), and store the new binned data in sleep_binned.
+data$sleep_binned = cut(data$sleep, breaks = c(0, 6, 7, 8, 9, Inf), 
+                        labels = c("0-6", "6-7", "7-8", "8-9", "9+"), 
+                        include.lowest = TRUE, right = FALSE)
 
-ggplot(data, aes(sleep, fill = intensity)) +
-  geom_histogram(binwidth = 2, alpha = 0.8, position = "stack")+ 
-  labs(title = "Histogram of Hours Slept at Night by Exercise Intensity",
+#Making a barchart with ggplot.
+ggplot(data , aes(sleep_binned, fill = intensity)) +
+  geom_bar(position = "stack")+ 
+  labs(title = "Comparitive Bar Chart between Hours Slept at Night and Exercise Intensity",
        x = "Hours Slept at Night",
-       y = "Frequency") +
+       y = "Frequency") + 
   theme_minimal()
